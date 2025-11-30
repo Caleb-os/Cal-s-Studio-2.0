@@ -50,6 +50,7 @@
       opacity:0;
       visibility:hidden;
       transition:opacity .3s ease;
+      z-index:999;
     }
     .drawer-overlay.show{
       opacity:1;
@@ -68,7 +69,7 @@
       flex-direction:column;
       gap:16px;
       transition:right .3s ease;
-      z-index:20;
+      z-index:1000;
     }
     .drawer.open{
       right:0;
