@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cal's Studio — Graphics, Video & Web Design</title>
+  <meta name="description" content="Cal's Studio — Creative studio specializing in graphic design, video editing and web design." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0f1724;
+      --card:#0b1220;
+      --accent:#6ee7b7;
+      --accent2:#a78bfa;
+      --muted:#94a3b8;
+      --glass: rgba(255,255,255,0.04);
+      --radius:18px;
+      color-scheme: dark;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#071028 0%,var(--bg) 100%);color:#e6eef6;overflow-x:hidden}
+    a{color:var(--accent);text-decoration:none}
+    .container{max-width:1100px;margin:0 auto;padding:28px}
+
+    /* Header */
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;z-index:100;background:linear-gradient(180deg,#071028 0%,var(--bg) 100%);padding:28px;backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.04);width:100%;box-sizing:border-box}
+    .brand{display:flex;align-items:center;gap:14px}
+    .logo{width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:800;color:#042025;font-size:22px;box-shadow:0 6px 18px rgba(0,0,0,0.5)}
+    .brand h1{font-size:18px;margin:0}
+    .brand p{margin:0;font-size:12px;color:var(--muted)}
+
+    nav{display:flex;gap:12px;align-items:center}
+    .btn{background:var(--glass);border:1px solid rgba(255,255,255,0.03);padding:10px 14px;border-radius:12px;font-weight:600}
+    .cta{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#042025;padding:10px 14px;border-radius:12px;border:none}
+
+    /* Mobile menu */
+    .hamburger{display:none;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px 12px;border-radius:10px;font-size:22px;color:#fff}
+    @media(max-width:760px){
+      nav{display:none}
+      .hamburger{display:block}
+    }
+
+    /* Drawer Menu */
+    .drawer-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.6);
+      backdrop-filter:blur(3px);
+      opacity:0;
+      visibility:hidden;
+      transition:opacity .3s ease;
+    }
+    .drawer-overlay.show{
+      opacity:1;
+      visibility:visible;
+    }
+    .drawer{
+      position:fixed;
+      top:0;
+      right:-260px;
+      width:240px;
+      height:100%;
+      background:var(--card);
+      box-shadow:-4px 0 20px rgba(0,0,0,0.6);
+      padding:24px;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+      transition:right .3s ease;
+      z-index:20;
+    }
+    .drawer.open{
+      right:0;
+    }
+    .drawer a{
+      display:block;
+      padding:10px 0;
+      color:#e6eef6;
+      font-weight:600;
+      border-bottom:1px solid rgba(255,255,255,0.05);
+    }
+    .drawer button{
+      background:transparent;
+      border:none;
+      color:var(--muted);
+      text-align:right;
+      font-size:18px;
+    }
+
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1fr;gap:22px;align-items:center;padding:36px 0}
+    .hero-inner{background:linear-gradient(180deg,rgba(255,255,255,0.02), transparent);padding:28px;border-radius:20px;box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+    .hero h2{font-size:28px;margin:0 0 8px}
+    .hero p{margin:0 0 16px;color:var(--muted)}
+    .actions{display:flex;gap:12px;flex-wrap:wrap}
+
+    /* Services */
+    .grid{display:grid;grid-template-columns:repeat(1,1fr);gap:16px}
+    .card{background:var(--card);padding:16px;border-radius:14px;border:1px solid rgba(255,255,255,0.03)}
+    .service-title{font-weight:700;margin:6px 0}
+    .service-desc{color:var(--muted);font-size:14px}
+
+    /* Portfolio */
+   .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .thumb.card {
+      position: relative;
+      height: 200px;
+      border-radius: 12px;
+      background-size: cover;
+      background-position: center;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      padding: 12px;
+      color: #fff;
+      font-weight: 600;
+      transition: transform .3s ease;
+      cursor: pointer;
+    }
+
+    .thumb.card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(200, 193, 193, 0.4);
+      transition: background .3s ease, opacity .25s ease;
+      will-change: background, opacity;
+      pointer-events: none;
+      /* subtle dark gradient so the background-image remains visible */
+      background: linear-gradient(180deg, rgba(0,0,0,0.06), rgba(0,0,0,0.18));
+    }
+
+    .thumb.card:hover {
+      transform: scale(1.03);
+    }
+
+    .thumb.card:hover::after {
+      background: rgba(0, 0, 0, 0.55);
+    }
+
+    .thumb.card h4 {
+      position: relative;
+      z-index: 2;
+      background: rgba(0, 0, 0, 0.55);
+      padding: 6px 10px;
+      border-radius: 6px;
+      margin: 0;
+      font-size: 14px;
+    }
+    /* Testimonials */
+    .testimonials{display:flex;flex-direction:column;gap:12px}
+    .quote{background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:12px;border-radius:12px}
+
+    /* Footer */
+    footer{margin-top:32px;padding:18px 0;color:var(--muted);font-size:14px;text-align:center}
+
+    /* Responsive */
+    @media(min-width:760px){
+      .hero{grid-template-columns:58% 40%}
+      .grid{grid-template-columns:repeat(3,1fr)}
+      .portfolio-grid{grid-template-columns:repeat(3,1fr)}
+    }
+
+    /* Utility animations */
+    .fade-in{animation:fadeIn .8s ease both}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+    .muted{color:var(--muted)}
+    input,textarea,select{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
+    .grid-sm{display:grid;grid-template-columns:1fr;gap:10px}
+    @media(min-width:760px){.grid-sm{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+  <header class="fade-in">
+      <div class="brand">
+        <div class="logo">CS</div>
+        <div>
+          <h1>Cal's Studio</h1>
+          <p>Graphics • Video • Web</p>
+        </div>
+      </div>
+
+      <nav>
+        <a class="btn" href="#services">Services</a>
+        <a class="btn" href="#work">Work</a>
+        <a class="btn" href="#about">About</a>
+        <a class="cta" href="#contact">Let's talk</a>
+      </nav>
+
+      <button id="mobileBtn" class="hamburger" aria-label="Open menu">☰</button>
+    </header>
+
+    <!-- Drawer -->
+    <div id="drawerOverlay" class="drawer-overlay"></div>
+    <div id="mobileDrawer" class="drawer" aria-hidden="true">
+      <button id="closeDrawer" aria-label="Close menu">✕</button>
+      <a href="#services">Services</a>
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Let's talk</a>
+    </div>
+
+    <div class="container">
+
+    <main>
+      <section class="hero">
+        <div class="hero-inner fade-in">
+          <h2>Design that tells your story — clean, bold, and memorable.</h2>
+          <p class="muted">Cal's Studio builds brand identities, creates video content that converts, and launches beautiful, fast websites. We combine strategic thinking with pixel-perfect craft.</p>
+          <div class="actions">
+            <a class="btn" href="#work">See portfolio</a>
+            <a class="cta" href="#contact">Request a quote</a>
+          </div>
+
+          <div style="margin-top:18px;display:grid;grid-template-columns:repeat(2,1fr);gap:8px">
+            <div class="card">
+              <div style="font-size:12px;color:var(--muted)">Clients</div>
+              <div style="font-weight:800">50+</div>
+            </div>
+            <div class="card">
+              <div style="font-size:12px;color:var(--muted)">Years</div>
+              <div style="font-weight:800">5+</div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="card fade-in">
+          <h3 style="margin-top:0">Quick services</h3>
+          <div class="grid">
+            <div class="card service">
+              <div style="font-size:12px;color:var(--muted)">Graphic Design</div>
+              <div class="service-title">Branding & Print</div>
+              <div class="service-desc">Logos, brand systems, posters, flyers — designs that scale across platforms.</div>
+            </div>
+            <div class="card service">
+              <div style="font-size:12px;color:var(--muted)">Video</div>
+              <div class="service-title">Editing & Motion</div>
+              <div class="service-desc">Promo cuts, social edits, and motion graphics for storytelling and ads.</div>
+            </div>
+            <div class="card service">
+              <div style="font-size:12px;color:var(--muted)">Web</div>
+              <div class="service-title">Sites & Landing Pages</div>
+              <div class="service-desc">Fast, responsive websites with attention to UX and conversion.</div>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section id="work" style="margin-top:22px">
+        <h3>Selected work</h3>
+        <p class="muted">A few recent projects.</p>
+<div class="portfolio-grid" style="margin-top:12px">
+  <div class="thumb card" style="background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZf9zIEdc7RCvsAZs-tThFsACvo6c5pY1jkw&s')">
+    <h4>Branding — Red bull</h4>
+  </div>
+  <div class="thumb card" style="background-image:url('data:image/png;base64,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')">
+    <h4>Website — TechLeap</h4>
+  </div>
+  <div class="thumb card" style="background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScJ7_MmGK63eblMghaqLOkos2aiyrz6BPJTQ&shttps://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcST_9Xgd2cSQnQ7PXh9jmpGv6GcqUf_C-d_IA&shttps://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcST_9Xgd2cSQnQ7PXh9jmpGv6GcqUf_C-d_IA&s')">
+    <h4>Video — Launch Promo</h4>
+  </div>
+  <div class="thumb card" style="background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTI5wMfNi18q8JGeQuDe842IWmQzmN8Ovyvgg&s')">
+    <h4>Poster — Music Fest</h4>
+  </div>
+  <div class="thumb card" style="background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC9YsUQDJLvBpRs8EXF0jZS9oBRsa5otsFVA&s')">
+    <h4>Social Kit — Retail</h4>
+  </div>
+  <div class="thumb card" style="background-image:url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6TmyzrPoVGOWkLUZ2YuaQqp5DVJzPBAyy2A&s')">
+    <h4>Animation — App Demo</h4>
+  </div>
+</div>
+
+      </section> 
+
+      <section id="about" style="margin-top:22px">
+        <h3>About Cal's Studio</h3>
+        <p class="muted">We are a small studio focused on clean visual language and measurable results. We partner with startups, creators, and businesses to craft design that works—both beautiful and functional.</p>
+
+        <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap">
+          <div class="card" style="flex:1;min-width:220px">
+            <h4 style="margin-top:0">Approach</h4>
+            <p class="muted">Research → concept → iterate → deliver. Every project has a clear goal and a timeline.</p>
+          </div>
+          <div class="card" style="flex:1;min-width:220px">
+            <h4 style="margin-top:0">Tools</h4>
+            <p class="muted">Figma, Adobe CC, Premiere Pro, After Effects, HTML/CSS/JS, and headless CMS options.</p>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:22px">
+        <h3>Testimonials</h3>
+        <div class="testimonials">
+          <div class="quote card">"Cal's Studio delivered a brand that people actually remember. Fast and professional." — A. Johnson</div>
+          <div class="quote card">"We saw a lift in conversions after the new landing page — great UX and performance." — S. Patel</div>
+        </div>
+      </section>
+
+      <section id="contact" style="margin-top:22px">
+        <h3>Contact</h3>
+        <p class="muted">Tell us about your project — we usually reply within 24–48 hours.</p>
+
+         <form id="contactForm" action="https://formspree.io/f/mgvldgvo" method="POST">
+          <div class="grid-sm">
+            <div>
+              <label for="name">Your name</label>
+              <input id="name" name="name" required placeholder="Jane Doe">
+            </div>
+            <div>
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" required placeholder="you@domain.com">
+            </div>
+          </div>
+          <div style="margin-top:10px">
+            <label for="service">Service</label>
+            <select id="service" name="service">
+              <option>Branding</option>
+              <option>Web design</option>
+              <option>Video editing</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div style="margin-top:10px">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" placeholder="Briefly describe your project"></textarea>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:12px;align-items:center">
+            <button type="submit" class="cta">Send message</button>
+            <div class="muted">Or email: <a href="mailto:olamideakin98@gmail.com">olamideakin98@gmail.com</a></div>
+          </div>
+        </form>
+        <p id="form-status" class="muted" style="margin-top:10px"></p>
+      </section>
+
+      <footer>
+        <div>© <span id="year"></span> Cal's Studio — Crafted with care.</div>
+      </footer>
+    </main>
+    </div>
+
+  <script>
+    // dynamic year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Drawer functionality
+    const mobileBtn = document.getElementById('mobileBtn');
+    const mobileDrawer = document.getElementById('mobileDrawer');
+    const closeDrawer = document.getElementById('closeDrawer');
+    const drawerOverlay = document.getElementById('drawerOverlay');
+
+    function openDrawer(){
+      mobileDrawer.classList.add('open');
+      drawerOverlay.classList.add('show');
+      mobileDrawer.setAttribute('aria-hidden','false');
+      drawerOverlay.setAttribute('aria-hidden','false');
+    }
+    function closeDrawerFn(){
+      mobileDrawer.classList.remove('open');
+      drawerOverlay.classList.remove('show');
+      mobileDrawer.setAttribute('aria-hidden','true');
+      drawerOverlay.setAttribute('aria-hidden','true');
+    }
+
+    mobileBtn.addEventListener('click', openDrawer);
+    closeDrawer.addEventListener('click', closeDrawerFn);
+    drawerOverlay.addEventListener('click', closeDrawerFn);
+    mobileDrawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeDrawerFn));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawerFn(); });
+
+    // Contact form
+    async function submitForm(event){
+      event.preventDefault();
+      const status = document.getElementById('form-status');
+      status.textContent = "Submitting...";
+      const form = event.target;
+      const data = new FormData(form);
+      try {
+        const response = await fetch(form.action || "#", { method: "POST", body: data });
+        if (response.ok) {
+          status.textContent = "✅ Thanks for your message! We'll get back to you soon.";
+          form.reset();
+        } else {
+          status.textContent = "⚠️ Oops! Something went wrong. Please try again.";
+        }
+      } catch {
+        status.textContent = "⚠️ Network error. Please check your connection.";
+      }
+    }
+  </script>
+</body>
+</html>
